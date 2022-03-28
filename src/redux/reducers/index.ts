@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import { personReducer } from "./personsReducer.js/personReducer";
-import { messagesReducer } from "./messagesReducer.js/messagesReducer";
+import { personReducer } from "./personsReducer/personReducer";
+import { messagesReducer } from "./messagesReducer/messagesReducer";
 
 const rootReducer = combineReducers({
     persons:personReducer,

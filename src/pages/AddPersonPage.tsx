@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import {AddPersonForm, LastPersonINfo} from '../components';
+import Message from '../components/Message';
 
 
 const AddPersonPage = () => {
@@ -8,6 +9,7 @@ const AddPersonPage = () => {
     <Wrapper>
       <AddPersonForm/>
       <LastPersonINfo />
+      <Message/>
     </Wrapper>
   );
 };

@@ -1,15 +1,22 @@
 import styled from 'styled-components';
 import { FormInput } from './';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { IMessages } from '../redux/reducers/messagesReducer/messagesTypesReducers';
+import { RootState } from '../redux/store';
 import {
   START_ADD_PERSON,
   SUCCESS_ADD_PERSON,
   ERROR_ADD_PERSON,
 } from '../redux/actions';
-import { ADD_MESSAGE } from '../redux/actions/messageActions';
+import { ADD_MESSAGE, DELETE_MESSAGE } from '../redux/actions/messageActions';
 
 const AddPersonForm = () => {
+  const { message, typeMessage, isShowMessage } = useSelector<
+    RootState,
+    IMessages
+  >((state) => state.messages);
   const dispatch = useDispatch();
   const [inputValues, setInputValues] = useState({
     name: '',
@@ -18,20 +25,31 @@ const AddPersonForm = () => {
     dateOfBirth: '',
     dateOfDeath: '',
   });
+
+  // const [isShowMessage, showMessage] = useState(false)
+  useEffect(() => {
+    setTimeout(() => {
+      if (isShowMessage) {
+        dispatch({
+          type: DELETE_MESSAGE,
+          payload: {
+            isShowMessage: false,
+          },
+        });
+      }
+    }, 2000);
+  }, [isShowMessage]);
+  const { name, secondName, lastName, dateOfBirth, dateOfDeath } = inputValues;
+
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setInputValues({
-      ...inputValues,
-      name: '',
-    });
-    const { name, secondName, lastName, dateOfBirth, dateOfDeath } =
-      inputValues;
+
     if (!name || !secondName || !lastName || !dateOfBirth || !dateOfDeath) {
       dispatch({
         type: ADD_MESSAGE,
         payload: {
-          typeMessages: 'danger',
-          message: ` please fiil all values`,
+          typeMessage: 'danger',
+          message: ` please fill all values`,
         },
       });
       return;
@@ -40,25 +58,32 @@ const AddPersonForm = () => {
     dispatch({
       type: ADD_MESSAGE,
       payload: {
-        typeMessages: 'success',
-        message: `person success added`,
+        typeMessage: 'success',
+        message: 'person successfully added',
+        isShowMessage: true,
       },
     });
-
     setInputValues({
-      ...inputValues,
       name: '',
       secondName: '',
       lastName: '',
       dateOfBirth: '',
       dateOfDeath: '',
     });
-    console.log(inputValues, 'Input values');
+    // showMessage(true)
+  };
+  const clearValues = () => {
+    setInputValues({
+      name: '',
+      secondName: '',
+      lastName: '',
+      dateOfBirth: '',
+      dateOfDeath: '',
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
-    console.log(inputValues);
   };
   return (
     <Wrapper>
@@ -67,34 +92,37 @@ const AddPersonForm = () => {
           type="text"
           name="name"
           handleChange={handleChange}
-          value={inputValues.name}
+          value={name}
         />
         <FormInput
           type="text"
           name="secondName"
           handleChange={handleChange}
-          value={inputValues.secondName}
+          value={secondName}
         />
         <FormInput
           type="text"
           name="lastName"
           handleChange={handleChange}
-          value={inputValues.lastName}
+          value={lastName}
         />
         <FormInput
           type="text"
           name="dateOfBirth"
           handleChange={handleChange}
-          value={inputValues.dateOfBirth}
+          value={dateOfBirth}
         />
         <FormInput
           type="text"
           name="dateOfDeath"
           handleChange={handleChange}
-          value={inputValues.dateOfDeath}
+          value={dateOfDeath}
         />
         <button type="submit" onClick={handleSubmit}>
           Save info
+        </button>
+        <button type="button" onClick={clearValues}>
+          clear
         </button>
       </form>
     </Wrapper>

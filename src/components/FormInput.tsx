@@ -1,18 +1,19 @@
 import styled from 'styled-components';
 
 interface InputTypes {
-  type: string;
-  name: string;
-  value: string;
+  type: string,
+  name: string,
+  value: string,
+  
   handleChange:(e:React.ChangeEvent<HTMLInputElement>)=>void;
 
 }
 
-const FormInput: React.FC<InputTypes> = ({ type, name, handleChange }) => {
+const FormInput: React.FC<InputTypes> = ({ type, name, handleChange ,value}) => {
   return (
     <Wrapper>
       <label htmlFor={name}>{name}</label>
-      <input type={type} name={name} onChange = {(e)=>handleChange(e)} />
+      <input type={type} name={name} value= {value}  onChange = {(e)=>handleChange(e)} />
     </Wrapper>
   );
 };
